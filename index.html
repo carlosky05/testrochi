@@ -223,14 +223,16 @@ function corregir() {
             res.textContent = "No has seleccionado respuesta.";
             res.style.color = "orange";
         } else if (sel === p.correcta) {
-            res.textContent = "Correcto ✔️";
+            res.innerHTML = "Correcto ✔️<br><small>" + (p.explicacion || "") + "</small>";
             res.style.color = "green";
         } else {
-            res.textContent = "Incorrecto ❌ (Correcta: " + p.opciones[p.correcta] + ")";
+            res.innerHTML = "Incorrecto ❌<br>Correcta: " + p.opciones[p.correcta] +
+                            "<br><small>" + (p.explicacion || "") + "</small>";
             res.style.color = "red";
         }
     });
 }
+
 
 // Generar test al cargar
 window.onload = generarTest;
