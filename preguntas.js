@@ -1112,159 +1112,190 @@ const preguntas = [
         ],
         correcta: 1
     },
-        // ============================
-    // CASOS PRÁCTICOS
+         // ============================
+    // CASOS PRÁCTICOS (CON EXPLICACIÓN)
     // ============================
 
     {
-        texto: "Caso 1: Una profesora en un centro de formación para adultos migrantes diseña sus clases a partir de situaciones reales. Afirmación: Esta profesora aplica un enfoque funcional centrado en actos de habla.",
+        texto: "Caso 1: Una profesora trabaja en un centro de formación para adultos migrantes. Diseña sus clases a partir de las situaciones de comunicación que los estudiantes podrían enfrentar en su vida diaria (comprar en el supermercado, pedir ayuda médica, rellenar un formulario). Afirmación: Esta profesora aplica un enfoque funcional, centrado en los actos de habla según el contexto comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Es funcional porque organiza el aprendizaje según actos de habla reales y necesidades comunicativas."
     },
     {
-        texto: "Caso 2: Un docente usa repetición de diálogos grabados, estructuras fijas y corrección inmediata sin contexto. Afirmación: Este profesor aplica una variante avanzada del enfoque comunicativo.",
+        texto: "Caso 2: Un docente de secundaria se basa únicamente en la repetición de diálogos grabados en cassette, la práctica de estructuras fijas y la corrección inmediata de los errores. No se contextualizan los enunciados. Afirmación: Este profesor aplica una variante avanzada del enfoque comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto corresponde al método audio-oral, basado en repetición mecánica y drills estructurales."
     },
     {
-        texto: "Caso 3: Un curso para técnicos en informática se centra en terminología específica y comprensión de manuales. Afirmación: Este caso ejemplifica el uso del francés instrumental.",
+        texto: "Caso 3: Un curso de francés para técnicos en informática se centra en el aprendizaje de terminología específica y en la comprensión escrita de manuales y documentación técnica. Afirmación: Este caso ejemplifica el uso del francés instrumental.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El francés instrumental se orienta a necesidades específicas y textos técnicos."
     },
     {
-        texto: "Caso 4: El profesor prohíbe totalmente la lengua materna y evita toda traducción. Afirmación: Esto refleja principios del método tradicional.",
+        texto: "Caso 4: En una clase de lengua extranjera, el profesor prohíbe completamente el uso de la lengua materna, prioriza la inmersión total y evita toda traducción. Afirmación: Esto refleja principios del método tradicional.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto corresponde al método directo, no al tradicional."
     },
     {
-        texto: "Caso 5: Una profesora trabaja con textos auténticos y tareas comunicativas reales. Afirmación: Este enfoque se alinea con el enfoque comunicativo.",
+        texto: "Caso 5: Una profesora trabaja con textos auténticos (noticias, entrevistas reales, recetas de cocina, etc.) y plantea tareas comunicativas reales. No da tanta importancia a seguir un manual estructurado. Afirmación: Este enfoque se alinea con el enfoque comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El enfoque comunicativo prioriza tareas reales y documentos auténticos."
     },
     {
-        texto: "Caso 6: Un curso organiza su contenido según listas de frecuencia del francés fundamental sin considerar el perfil del estudiante. Afirmación: Este enfoque se basa en el método audiovisual.",
+        texto: "Caso 6: Un curso organiza su contenido a partir de una lista de frecuencias léxicas del francés fundamental, sin considerar el perfil del alumnado. Afirmación: Este enfoque se basa en el método audiovisual.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El MAV se basaba en el francés fundamental y listas de frecuencia."
     },
     {
-        texto: "Caso 7: Un docente prepara su clase centrada en estructuras necesarias para actos de habla como pedir permiso u opinar. Afirmación: Esto se relaciona con el enfoque funcional.",
+        texto: "Caso 7: Un docente prepara su clase centrada en estructuras necesarias para expresar opiniones, pedir permiso y rechazar propuestas, aplicadas a diálogos simulados. Afirmación: Esto se relaciona con el enfoque funcional.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El enfoque funcional organiza el contenido por funciones comunicativas."
     },
     {
         texto: "Caso 8: El profesor introduce primero normas gramaticales, luego traducción y finalmente lectura. Afirmación: Este procedimiento sigue la lógica del método tradicional.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El método tradicional sigue exactamente ese orden: gramática → traducción → lectura."
     },
     {
-        texto: "Caso 9: Una profesora cree que aprender una lengua es desarrollar reflejos automáticos mediante repetición sin contexto. Afirmación: Esta afirmación representa una concepción cognitivista.",
+        texto: "Caso 9: Una profesora cree que aprender una lengua es desarrollar reflejos automáticos mediante repetición intensiva sin contexto. Afirmación: Esta afirmación representa una concepción cognitivista.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Es conductista, propio del método audio-oral."
     },
     {
         texto: "Caso 10: Antes de diseñar un curso se analiza el perfil, intereses y necesidades del estudiante. Afirmación: Esta práctica refleja la lógica del análisis de necesidades.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El análisis de necesidades es la base del enfoque funcional e instrumental."
     },
     {
-        texto: "Caso 11: Un profesor enseña reglas y listas de vocabulario antes de usarlas en oraciones. Afirmación: Este profesor sigue un enfoque comunicativo centrado en la interacción.",
+        texto: "Caso 11: Un profesor enseña reglas y listas de vocabulario antes de usarlas. Afirmación: Este profesor sigue un enfoque comunicativo centrado en la interacción.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto es propio del método tradicional, no del comunicativo."
     },
     {
         texto: "Caso 12: Los estudiantes interactúan para resolver tareas reales y el profesor actúa como guía. Afirmación: Esta es una clase basada en el enfoque comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El enfoque comunicativo prioriza tareas reales e interacción."
     },
     {
-        texto: "Caso 13: El contenido se organiza según actos de habla como saludar, pedir información o expresar acuerdo. Afirmación: Este curso se basa en el enfoque funcional.",
+        texto: "Caso 13: El contenido se organiza según actos de habla concretos. Afirmación: Este curso se basa en el enfoque funcional.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El enfoque funcional organiza el contenido por funciones comunicativas."
     },
     {
-        texto: "Caso 14: Los estudiantes aprenden mediante grabaciones y videos con situaciones reales y repiten estructuras. Afirmación: Se trata de una aplicación del método audiovisual.",
+        texto: "Caso 14: El estudiantado aprende mediante grabaciones y videos y repite estructuras. Afirmación: Se trata del método audiovisual.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El MAV usa imagen + sonido + repetición contextualizada."
     },
     {
         texto: "Caso 15: Un curso para adultos que necesitan nacionalidad se basa en formularios oficiales y entrevistas. Afirmación: El enfoque es funcional-instrumental.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Es funcional-instrumental porque responde a necesidades reales y específicas."
     },
     {
-        texto: "Caso 16: El docente evita traducir y prefiere imágenes, gestos y contexto para enseñar significados. Afirmación: Esta práctica se alinea con el método directo.",
+        texto: "Caso 16: El docente evita traducir y usa imágenes y gestos. Afirmación: Esta práctica se alinea con el método directo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El método directo evita la lengua materna y usa apoyo visual."
     },
     {
-        texto: "Caso 17: Un profesor cree que las estructuras deben practicarse aisladas y repetitivamente sin contexto. Afirmación: Esta visión refleja la metodología comunicativa.",
+        texto: "Caso 17: Las estructuras se practican aisladas y repetitivamente sin contexto. Afirmación: Esta visión refleja la metodología comunicativa.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto es propio del método audio-oral, no del comunicativo."
     },
     {
         texto: "Caso 18: Un programa adapta contenidos a técnicos de laboratorio según su campo profesional. Afirmación: Este modelo responde a la didáctica de objetivos específicos.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Es un ejemplo claro de enseñanza de lenguas con fines específicos."
     },
     {
-        texto: "Caso 19: Un examen evalúa solo reglas gramaticales y traducción, sin interacción ni textos auténticos. Afirmación: Esta evaluación sigue principios cognitivistas.",
+        texto: "Caso 19: Un examen evalúa solo reglas gramaticales y traducción. Afirmación: Esta evaluación sigue principios cognitivistas.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Es propio del método tradicional, no del cognitivismo."
     },
     {
         texto: "Caso 20: Una profesora usa juegos de rol, análisis de intenciones y ejercicios de pronunciación. Afirmación: Este enfoque es una síntesis comunicativa con elementos estructurales.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Combina comunicación + estructura, típico de enfoques mixtos."
     },
     {
         texto: "Caso 21: Un curso usa exclusivamente textos auténticos sin adaptar el nivel. Afirmación: Esta práctica es coherente con el método audiovisual.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto es comunicativo, no audiovisual."
     },
     {
         texto: "Caso 22: El profesor usa diálogos grabados y ejercicios orales repetitivos. Afirmación: Este enfoque refleja el método audio-oral.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Es exactamente el método audio-oral."
     },
     {
-        texto: "Caso 23: Un programa incluye juegos, canciones y cuentos, evitando corregir errores para no frenar participación. Afirmación: Este enfoque se relaciona con la metodología activa y el enfoque comunicativo.",
+        texto: "Caso 23: Un programa incluye juegos, canciones y cuentos, evitando corregir errores. Afirmación: Este enfoque se relaciona con la metodología activa y el enfoque comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "La metodología activa prioriza motivación y participación."
     },
     {
         texto: "Caso 24: La clase prioriza memorizar paradigmas verbales antes de usarlos. Afirmación: Esta técnica se basa en la metodología comunicativa.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Esto es tradicional/estructuralista, no comunicativo."
     },
     {
         texto: "Caso 25: Un curso para camareros se diseña según actos de habla necesarios en su trabajo. Afirmación: Este curso se basa en el enfoque funcional.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "Es funcional porque se organiza por funciones comunicativas laborales."
     },
     {
         texto: "Caso 26: La profesora adapta su metodología a las estrategias previas de los estudiantes. Afirmación: Esta práctica se apoya en el enfoque cognitivista.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El cognitivismo considera estrategias mentales del aprendiz."
     },
     {
         texto: "Caso 27: Los ejercicios estructurales no remiten a ninguna situación comunicativa. Afirmación: Este enfoque se distancia del enfoque comunicativo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El comunicativo exige contexto; aquí no lo hay."
     },
     {
-        texto: "Caso 28: El curso se orienta a usar el francés en situaciones reales como entrevistas o exposiciones. Afirmación: Es una aplicación del enfoque por tareas dentro del marco comunicativo.",
+        texto: "Caso 28: El curso se orienta a usar el francés en situaciones reales como entrevistas o exposiciones. Afirmación: Es una aplicación del enfoque por tareas.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El enfoque por tareas se basa en actividades reales."
     },
     {
         texto: "Caso 29: La profesora evita cualquier idioma que no sea francés y prohíbe la traducción. Afirmación: Esta postura está en línea con el método directo.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 0
+        correcta: 0,
+        explicacion: "El método directo evita la lengua materna."
     },
     {
-        texto: "Caso 30: En un curso para estudiantes de medicina se enseñan términos técnicos y comunicación con pacientes. Afirmación: Este tipo de enseñanza se basa en un enfoque universalista.",
+        texto: "Caso 30: En un curso de francés para estudiantes de medicina se enseñan términos técnicos y comunicación con pacientes. Afirmación: Este tipo de enseñanza se basa en un enfoque universalista.",
         opciones: ["Verdadero", "Falso"],
-        correcta: 1
+        correcta: 1,
+        explicacion: "Es un enfoque específico y funcional, no universalista."
     }
+
 ];
 
