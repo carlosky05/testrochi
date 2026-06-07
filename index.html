@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test Didáctica</title>
+<<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f4f6f9;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 2rem;
+        color: #222;
+    }
+
+    p {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+
+    /* CONTENEDOR GENERAL */
+    #contenedor {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    /* TARJETAS DE PREGUNTA */
+    .pregunta {
+        background: white;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pregunta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .pregunta h3 {
+        margin-top: 0;
+        font-size: 1.2rem;
+        color: #222;
+    }
+
+    label {
+        display: flex;
+        align-items: center;
+        padding: 6px 0;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    input[type="radio"] {
+        transform: scale(1.3);
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    /* RESULTADOS */
+    .resultado {
+        margin-top: 12px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* BOTONES */
+    button {
+        display: block;
+        margin: 20px auto;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        background: #0078ff;
+        color: white;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background: #005fcc;
+        transform: scale(1.03);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+
+        .pregunta {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+        }
+
+        button {
+            width: 90%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .pregunta h3 {
+            font-size: 1rem;
+        }
+
+        label {
+            font-size: 0.95rem;
+        }
+
+        input[type="radio"] {
+            transform: scale(1.1);
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>Test Didáctica</h1>
+<p>Selecciona una respuesta en cada pregunta y pulsa "Corregir".</p>
+
+<button onclick="generarTest()">🔄 Volver a mezclar</button>
+<br><br>
+
+<div id="contenedor"></div>
+
+<button onclick="corregir()">Corregir</button>
+
+<!-- Carga externa de preguntas -->
+<script src="preguntas.js"></script>
+
+<script>
+// =====================================================
+//  FUNCIÓN PARA MEZCLAR ARRAYS (Fisher–Yates)
+// =====================================================
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+// =====================================================
+//  GENERADOR AUTOMÁTICO DEL TEST (ALEATORIZADO)
+// =====================================================
+function generarTest() {
+    const cont = document.getElementById("contenedor");
+    cont.innerHTML = ""; // Limpia antes de generar
+
+    // 1) Mezclar el orden de las preguntas
+    shuffleArray(preguntas);
+
+    preguntas.forEach((p, i) => {
+
+        // 2) Mezclar el orden de las respuestas
+        const opcionesOriginales = [...p.opciones];
+        const indices = opcionesOriginales.map((_, idx) => idx);
+        shuffleArray(indices);
+
+        // Reordenamos las opciones según los índices mezclados
+        p.opciones = indices.map(idx => opcionesOriginales[idx]);
+
+        // Recalculamos la posición de la respuesta correcta
+        p.correcta = indices.indexOf(p.correcta);
+
+        // --- Generación del HTML ---
+        const div = document.createElement("div");
+        div.className = "pregunta";
+
+        const h = document.createElement("h3");
+        h.textContent = (i + 1) + ". " + p.texto;
+        div.appendChild(h);
+
+        p.opciones.forEach((op, j) => {
+            const label = document.createElement("label");
+            const r = document.createElement("input");
+            r.type = "radio";
+            r.name = "p" + i;
+            r.value = j;
+            label.appendChild(r);
+            label.appendChild(document.createTextNode(" " + op));
+            div.appendChild(label);
+            div.appendChild(document.createElement("br"));
+        });
+
+        const res = document.createElement("div");
+        res.id = "res" + i;
+        res.className = "resultado";
+        div.appendChild(res);
+
+        cont.appendChild(div);
+    });
+}
+
+// =====================================================
+//  CORRECCIÓN DEL TEST
+// =====================================================
+function corregir() {
+    preguntas.forEach((p, i) => {
+        const radios = document.getElementsByName("p" + i);
+        let sel = -1;
+        radios.forEach(r => { if (r.checked) sel = parseInt(r.value); });
+
+        const res = document.getElementById("res" + i);
+
+        if (sel === -1) {
+            res.textContent = "No has seleccionado respuesta.";
+            res.style.color = "orange";
+        } else if (sel === p.correcta) {
+            res.textContent = "Correcto ✔️";
+            res.style.color = "green";
+        } else {
+            res.textContent = "Incorrecto ❌ (Correcta: " + p.opciones[p.correcta] + ")";
+            res.style.color = "red";
+        }
+    });
+}
+
+// Generar test al cargar
+window.onload = generarTest;
+</script>
+
+</body>
+</html>
