@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Test Didáctica</title>
-<<style>
+
+<style>
     body {
         font-family: "Segoe UI", Arial, sans-serif;
         margin: 0;
@@ -25,13 +26,11 @@
         font-size: 1.1rem;
     }
 
-    /* CONTENEDOR GENERAL */
     #contenedor {
         max-width: 900px;
         margin: auto;
     }
 
-    /* TARJETAS DE PREGUNTA */
     .pregunta {
         background: white;
         padding: 20px;
@@ -66,14 +65,12 @@
         cursor: pointer;
     }
 
-    /* RESULTADOS */
     .resultado {
         margin-top: 12px;
         font-weight: bold;
         font-size: 1.1rem;
     }
 
-    /* BOTONES */
     button {
         display: block;
         margin: 20px auto;
@@ -96,7 +93,6 @@
         transform: scale(0.98);
     }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
         body {
             padding: 10px;
@@ -133,16 +129,14 @@
 <body>
 
 <h1>Test Didáctica</h1>
-<p>Selecciona una respuesta en cada pregunta y pulsa "Corregir".</p>
+<p>Selecciona una respuesta y se corregirá automáticamente.</p>
 
-<button onclick="generarTest()">🔄 Volver a mezclar</button>
+<button onclick="generarTest()">🔄 Volver a mezclar respuestas</button>
 <br><br>
 
 <div id="contenedor"></div>
 
-<button onclick="corregir()">Corregir</button>
-
-<!-- Carga externa de preguntas -->
+<!-- Archivo externo con las preguntas -->
 <script src="preguntas.js"></script>
 
 <script>
@@ -157,27 +151,22 @@ function shuffleArray(arr) {
 }
 
 // =====================================================
-//  GENERADOR AUTOMÁTICO DEL TEST (ALEATORIZADO)
+//  GENERADOR DEL TEST (SIN MEZCLAR PREGUNTAS)
 // =====================================================
 function generarTest() {
     const cont = document.getElementById("contenedor");
-    cont.innerHTML = ""; // Limpia antes de generar
+    cont.innerHTML = "";
 
-    // 1) Mezclar el orden de las preguntas
+    preguntas.forEach((p, i) => {
 
-       preguntas.forEach((p, i) => {
-        // 2) Mezclar el orden de las respuestas
+        // Mezclar SOLO las respuestas
         const opcionesOriginales = [...p.opciones];
         const indices = opcionesOriginales.map((_, idx) => idx);
         shuffleArray(indices);
 
-        // Reordenamos las opciones según los índices mezclados
         p.opciones = indices.map(idx => opcionesOriginales[idx]);
-
-        // Recalculamos la posición de la respuesta correcta
         p.correcta = indices.indexOf(p.correcta);
 
-        // --- Generación del HTML ---
         const div = document.createElement("div");
         div.className = "pregunta";
 
@@ -191,6 +180,10 @@ function generarTest() {
             r.type = "radio";
             r.name = "p" + i;
             r.value = j;
+
+            // Corrección automática
+            r.onchange = () => corregirUna(i, j);
+
             label.appendChild(r);
             label.appendChild(document.createTextNode(" " + op));
             div.appendChild(label);
@@ -207,32 +200,22 @@ function generarTest() {
 }
 
 // =====================================================
-//  CORRECCIÓN DEL TEST
+//  CORRECCIÓN AUTOMÁTICA DE UNA PREGUNTA
 // =====================================================
-function corregir() {
-    preguntas.forEach((p, i) => {
-        const radios = document.getElementsByName("p" + i);
-        let sel = -1;
-        radios.forEach(r => { if (r.checked) sel = parseInt(r.value); });
+function corregirUna(i, seleccion) {
+    const p = preguntas[i];
+    const res = document.getElementById("res" + i);
 
-        const res = document.getElementById("res" + i);
-
-        if (sel === -1) {
-            res.textContent = "No has seleccionado respuesta.";
-            res.style.color = "orange";
-        } else if (sel === p.correcta) {
-            res.innerHTML = "Correcto ✔️<br><small>" + (p.explicacion || "") + "</small>";
-            res.style.color = "green";
-        } else {
-            res.innerHTML = "Incorrecto ❌<br>Correcta: " + p.opciones[p.correcta] +
-                            "<br><small>" + (p.explicacion || "") + "</small>";
-            res.style.color = "red";
-        }
-    });
+    if (seleccion === p.correcta) {
+        res.innerHTML = "Correcto ✔️<br><small>" + (p.explicacion || "") + "</small>";
+        res.style.color = "green";
+    } else {
+        res.innerHTML = "Incorrecto ❌<br>Correcta: " + p.opciones[p.correcta] +
+                        "<br><small>" + (p.explicacion || "") + "</small>";
+        res.style.color = "red";
+    }
 }
 
-
-// Generar test al cargar
 window.onload = generarTest;
 </script>
 
