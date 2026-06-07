@@ -20,10 +20,33 @@
         color: #222;
     }
 
-    p {
-        text-align: center;
+    /* CUADROS DE ESTADÍSTICAS */
+    #stats {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
         margin-bottom: 25px;
+    }
+
+    .statBox {
+        background: white;
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        text-align: center;
+        width: 160px;
+    }
+
+    .statBox h2 {
+        margin: 0;
         font-size: 1.1rem;
+        color: #222;
+    }
+
+    .statBox p {
+        margin: 5px 0 0;
+        font-size: 1.4rem;
+        font-weight: bold;
     }
 
     #contenedor {
@@ -92,51 +115,30 @@
     button:active {
         transform: scale(0.98);
     }
-
-    @media (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
-
-        .pregunta {
-            padding: 15px;
-        }
-
-        h1 {
-            font-size: 1.6rem;
-        }
-
-        button {
-            width: 90%;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .pregunta h3 {
-            font-size: 1rem;
-        }
-
-        label {
-            font-size: 0.95rem;
-        }
-
-        input[type="radio"] {
-            transform: scale(1.1);
-        }
-    }
 </style>
 </head>
 <body>
 
 <h1>Test Didáctica</h1>
-<p>Selecciona una respuesta y se corregirá automáticamente.</p>
+
+<!-- CUADROS DE ESTADÍSTICAS -->
+<div id="stats">
+    <div class="statBox">
+        <h2>✔️ Aciertos</h2>
+        <p id="aciertos">0%</p>
+    </div>
+
+    <div class="statBox">
+        <h2>❌ Fallos</h2>
+        <p id="fallos">0%</p>
+    </div>
+</div>
 
 <button onclick="generarTest()">🔄 Volver a mezclar respuestas</button>
-<br><br>
+<br>
 
 <div id="contenedor"></div>
 
-<!-- Archivo externo con las preguntas -->
 <script src="preguntas.js"></script>
 
 <script>
@@ -150,10 +152,16 @@ function shuffleArray(arr) {
     }
 }
 
+let respuestasUsuario = {}; // Para estadísticas
+
 // =====================================================
 //  GENERADOR DEL TEST (SIN MEZCLAR PREGUNTAS)
 // =====================================================
 function generarTest() {
+    respuestasUsuario = {}; // Reiniciar estadísticas
+
+    actualizarStats();
+
     const cont = document.getElementById("contenedor");
     cont.innerHTML = "";
 
@@ -181,7 +189,6 @@ function generarTest() {
             r.name = "p" + i;
             r.value = j;
 
-            // Corrección automática
             r.onchange = () => corregirUna(i, j);
 
             label.appendChild(r);
@@ -206,6 +213,8 @@ function corregirUna(i, seleccion) {
     const p = preguntas[i];
     const res = document.getElementById("res" + i);
 
+    respuestasUsuario[i] = (seleccion === p.correcta) ? 1 : 0;
+
     if (seleccion === p.correcta) {
         res.innerHTML = "Correcto ✔️<br><small>" + (p.explicacion || "") + "</small>";
         res.style.color = "green";
@@ -214,6 +223,29 @@ function corregirUna(i, seleccion) {
                         "<br><small>" + (p.explicacion || "") + "</small>";
         res.style.color = "red";
     }
+
+    actualizarStats();
+}
+
+// =====================================================
+//  ACTUALIZAR ESTADÍSTICAS
+// =====================================================
+function actualizarStats() {
+    const total = preguntas.length;
+    const contestadas = Object.keys(respuestasUsuario).length;
+
+    let aciertos = 0;
+    for (let k in respuestasUsuario) {
+        aciertos += respuestasUsuario[k];
+    }
+
+    const fallos = contestadas - aciertos;
+
+    const pctAciertos = ((aciertos / total) * 100).toFixed(1);
+    const pctFallos = ((fallos / total) * 100).toFixed(1);
+
+    document.getElementById("aciertos").textContent = pctAciertos + "%";
+    document.getElementById("fallos").textContent = pctFallos + "%";
 }
 
 window.onload = generarTest;
