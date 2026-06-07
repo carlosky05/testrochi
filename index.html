@@ -165,7 +165,7 @@ function generarTest() {
 
     // 1) Mezclar el orden de las preguntas
 
-
+       preguntas.forEach((p, i) => {
         // 2) Mezclar el orden de las respuestas
         const opcionesOriginales = [...p.opciones];
         const indices = opcionesOriginales.map((_, idx) => idx);
