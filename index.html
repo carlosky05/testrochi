@@ -20,7 +20,6 @@
         color: #222;
     }
 
-    /* CUADROS DE ESTADÍSTICAS */
     #stats {
         display: flex;
         justify-content: center;
@@ -60,12 +59,6 @@
         margin-bottom: 25px;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .pregunta:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
 
     .pregunta h3 {
@@ -95,8 +88,8 @@
     }
 
     button {
-        display: block;
-        margin: 20px auto;
+        display: inline-block;
+        margin: 10px;
         padding: 12px 25px;
         font-size: 1.1rem;
         border: none;
@@ -104,16 +97,15 @@
         cursor: pointer;
         background: #0078ff;
         color: white;
-        transition: background 0.2s ease, transform 0.2s ease;
     }
 
     button:hover {
         background: #005fcc;
-        transform: scale(1.03);
     }
 
-    button:active {
-        transform: scale(0.98);
+    .center {
+        text-align: center;
+        margin-bottom: 20px;
     }
 </style>
 </head>
@@ -121,7 +113,6 @@
 
 <h1>Test Didáctica</h1>
 
-<!-- CUADROS DE ESTADÍSTICAS -->
 <div id="stats">
     <div class="statBox">
         <h2>✔️ Aciertos</h2>
@@ -134,8 +125,15 @@
     </div>
 </div>
 
-<button onclick="generarTest()">🔄 Volver a mezclar respuestas</button>
-<br>
+<div class="center">
+    <button onclick="mostrarBloque(1)">Bloque 1</button>
+    <button onclick="mostrarBloque(2)">Bloque 2</button>
+    <button onclick="mostrarBloque(3)">Bloque 3</button>
+</div>
+
+<div class="center">
+    <button id="btnSiguiente" onclick="siguienteBloque()">➡️ Siguiente bloque</button>
+</div>
 
 <div id="contenedor"></div>
 
@@ -143,7 +141,7 @@
 
 <script>
 // =====================================================
-//  FUNCIÓN PARA MEZCLAR ARRAYS (Fisher–Yates)
+// MEZCLAR ARRAYS
 // =====================================================
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -152,44 +150,81 @@ function shuffleArray(arr) {
     }
 }
 
-let respuestasUsuario = {}; // Para estadísticas
+let respuestasUsuario = {};
+let preguntasMezcladas = {};
+let bloqueActual = 1;
 
 // =====================================================
-//  GENERADOR DEL TEST (SIN MEZCLAR PREGUNTAS)
+// CAMBIAR DE BLOQUE
+// =====================================================
+function mostrarBloque(num) {
+    bloqueActual = num;
+    generarTest();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function siguienteBloque() {
+    if (bloqueActual < 3) {
+        bloqueActual++;
+        generarTest();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// =====================================================
+// GENERAR TEST
 // =====================================================
 function generarTest() {
-    respuestasUsuario = {}; // Reiniciar estadísticas
-
+    respuestasUsuario = {};
+    preguntasMezcladas = {};
     actualizarStats();
 
     const cont = document.getElementById("contenedor");
     cont.innerHTML = "";
 
-    preguntas.forEach((p, i) => {
+    let lista = [];
 
-        // Mezclar SOLO las respuestas
-        const opcionesOriginales = [...p.opciones];
+    if (bloqueActual === 1) lista = preguntas.bloque1;
+    if (bloqueActual === 2) lista = preguntas.bloque2;
+    if (bloqueActual === 3) lista = preguntas.bloque3;
+
+    const displayNext = (bloqueActual === 3) ? "none" : "inline-block";
+    document.getElementById("btnSiguiente").style.display = displayNext;
+    document.getElementById("btnSiguienteBottom").style.display = displayNext;
+
+    lista.forEach((p, i) => {
+        const idPregunta = i + 1;
+
+        let pregunta = {
+            texto: p.texto,
+            opciones: [...p.opciones],
+            correcta: p.correcta
+        };
+
+        const opcionesOriginales = [...pregunta.opciones];
         const indices = opcionesOriginales.map((_, idx) => idx);
         shuffleArray(indices);
 
-        p.opciones = indices.map(idx => opcionesOriginales[idx]);
-        p.correcta = indices.indexOf(p.correcta);
+        pregunta.opciones = indices.map(idx => opcionesOriginales[idx]);
+        pregunta.correcta = indices.indexOf(pregunta.correcta);
+
+        preguntasMezcladas[idPregunta] = pregunta;
 
         const div = document.createElement("div");
         div.className = "pregunta";
 
         const h = document.createElement("h3");
-        h.textContent = (i + 1) + ". " + p.texto;
+        h.textContent = idPregunta + ". " + pregunta.texto;
         div.appendChild(h);
 
-        p.opciones.forEach((op, j) => {
+        pregunta.opciones.forEach((op, j) => {
             const label = document.createElement("label");
             const r = document.createElement("input");
             r.type = "radio";
-            r.name = "p" + i;
+            r.name = "p" + idPregunta;
             r.value = j;
 
-            r.onchange = () => corregirUna(i, j);
+            r.onchange = () => corregirUna(idPregunta, j);
 
             label.appendChild(r);
             label.appendChild(document.createTextNode(" " + op));
@@ -198,7 +233,7 @@ function generarTest() {
         });
 
         const res = document.createElement("div");
-        res.id = "res" + i;
+        res.id = "res" + idPregunta;
         res.className = "resultado";
         div.appendChild(res);
 
@@ -207,49 +242,55 @@ function generarTest() {
 }
 
 // =====================================================
-//  CORRECCIÓN AUTOMÁTICA DE UNA PREGUNTA
+// CORREGIR UNA PREGUNTA
 // =====================================================
-function corregirUna(i, seleccion) {
-    const p = preguntas[i];
-    const res = document.getElementById("res" + i);
+function corregirUna(id, seleccion) {
+    const pregunta = preguntasMezcladas[id];
+    const res = document.getElementById("res" + id);
+    if (!res) return;
 
-    respuestasUsuario[i] = (seleccion === p.correcta) ? 1 : 0;
+    const esCorrecta = (seleccion === pregunta.correcta);
+    respuestasUsuario[id] = esCorrecta ? 1 : 0;
 
-    if (seleccion === p.correcta) {
-        res.innerHTML = "Correcto ✔️<br><small>" + (p.explicacion || "") + "</small>";
-        res.style.color = "green";
-    } else {
-        res.innerHTML = "Incorrecto ❌<br>Correcta: " + p.opciones[p.correcta] +
-                        "<br><small>" + (p.explicacion || "") + "</small>";
-        res.style.color = "red";
-    }
+    res.innerHTML = esCorrecta
+        ? "Correcto ✔️"
+        : "Incorrecto ❌<br>Correcta: " + pregunta.opciones[pregunta.correcta];
+
+    res.style.color = esCorrecta ? "green" : "red";
 
     actualizarStats();
 }
 
 // =====================================================
-//  ACTUALIZAR ESTADÍSTICAS
+// ESTADÍSTICAS
 // =====================================================
 function actualizarStats() {
-    const total = preguntas.length;
     const contestadas = Object.keys(respuestasUsuario).length;
 
     let aciertos = 0;
-    for (let k in respuestasUsuario) {
-        aciertos += respuestasUsuario[k];
-    }
+    for (let k in respuestasUsuario) aciertos += respuestasUsuario[k];
 
     const fallos = contestadas - aciertos;
 
-    const pctAciertos = ((aciertos / total) * 100).toFixed(1);
-    const pctFallos = ((fallos / total) * 100).toFixed(1);
+    if (contestadas === 0) {
+        document.getElementById("aciertos").textContent = "0%";
+        document.getElementById("fallos").textContent = "0%";
+        return;
+    }
 
-    document.getElementById("aciertos").textContent = pctAciertos + "%";
-    document.getElementById("fallos").textContent = pctFallos + "%";
+    document.getElementById("aciertos").textContent =
+        ((aciertos / contestadas) * 100).toFixed(1) + "%";
+
+    document.getElementById("fallos").textContent =
+        ((fallos / contestadas) * 100).toFixed(1) + "%";
 }
 
 window.onload = generarTest;
 </script>
+
+<div class="center" style="margin-top: 30px;">
+    <button id="btnSiguienteBottom" onclick="siguienteBloque()">➡️ Siguiente bloque</button>
+</div>
 
 </body>
 </html>
