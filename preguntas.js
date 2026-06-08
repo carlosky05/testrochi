@@ -1,4 +1,5 @@
-const preguntas = [
+const preguntas = {
+    bloque1: [
     // ============================
     // I. MÉTODO TRADICIONAL
     // ============================
@@ -867,7 +868,9 @@ const preguntas = [
         ],
         correcta: 3
     },
+],
 
+    bloque2: [
     // ============================
     // TEST COMPARATIVO
     // ============================
@@ -1112,6 +1115,8 @@ const preguntas = [
         ],
         correcta: 1
     },
+],
+    bloque3: [
          // ============================
     // CASOS PRÁCTICOS (CON EXPLICACIÓN)
     // ============================
@@ -1295,7 +1300,162 @@ texto: "Caso 30: En un curso de francés para estudiantes de medicina, se enseñ
 opciones: ["Verdadero","Falso"],
 correcta: 1,
 explicacion: "Respuesta: Falso (es un enfoque específico y funcional)"
-},
+}
+,
+    ],
+};
 
-];
+// Mezclar arrays
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
 
+// Guardará las preguntas mezcladas del bloque actual
+let preguntasMezcladas = {};
+
+let respuestasUsuario = {};
+let bloqueActual = 1;
+
+// =====================================================
+// CAMBIAR DE BLOQUE
+// =====================================================
+
+function mostrarBloque(num) {
+    bloqueActual = num;
+    generarTest();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function siguienteBloque() {
+    if (bloqueActual < 3) {
+        bloqueActual++;
+        generarTest();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+// =====================================================
+// GENERAR TEST
+// =====================================================
+
+function generarTest() {
+    respuestasUsuario = {};
+    preguntasMezcladas = {};
+    actualizarStats();
+
+    const cont = document.getElementById("contenedor");
+    cont.innerHTML = "";
+
+    let lista = [];
+
+    if (bloqueActual === 1) lista = preguntas.bloque1;
+    if (bloqueActual === 2) lista = preguntas.bloque2;
+    if (bloqueActual === 3) lista = preguntas.bloque3;
+
+    const displayNext = (bloqueActual === 3) ? "none" : "inline-block";
+    document.getElementById("btnSiguiente").style.display = displayNext;
+    document.getElementById("btnSiguienteBottom").style.display = displayNext;
+
+    lista.forEach((p, i) => {
+        const idPregunta = i + 1;
+
+        // Clonar pregunta
+        let pregunta = {
+            texto: p.texto,
+            opciones: [...p.opciones],
+            correcta: p.correcta
+        };
+
+        // Mezclar respuestas
+        const opcionesOriginales = [...pregunta.opciones];
+        const indices = opcionesOriginales.map((_, idx) => idx);
+        shuffleArray(indices);
+
+        pregunta.opciones = indices.map(idx => opcionesOriginales[idx]);
+        pregunta.correcta = indices.indexOf(pregunta.correcta);
+
+        // Guardar pregunta mezclada
+        preguntasMezcladas[idPregunta] = pregunta;
+
+        // Crear HTML
+        const div = document.createElement("div");
+        div.className = "pregunta";
+
+        const h = document.createElement("h3");
+        h.textContent = idPregunta + ". " + pregunta.texto;
+        div.appendChild(h);
+
+        pregunta.opciones.forEach((op, j) => {
+            const label = document.createElement("label");
+            const r = document.createElement("input");
+            r.type = "radio";
+            r.name = "p" + idPregunta;
+            r.value = j;
+
+            r.onchange = () => corregirUna(idPregunta, j);
+
+            label.appendChild(r);
+            label.appendChild(document.createTextNode(" " + op));
+            div.appendChild(label);
+            div.appendChild(document.createElement("br"));
+        });
+
+        const res = document.createElement("div");
+        res.id = "res" + idPregunta;
+        res.className = "resultado";
+        div.appendChild(res);
+
+        cont.appendChild(div);
+    });
+}
+
+// =====================================================
+// CORREGIR UNA PREGUNTA
+// =====================================================
+
+function corregirUna(id, seleccion) {
+    const pregunta = preguntasMezcladas[id];
+    const res = document.getElementById("res" + id);
+    if (!res) return;
+
+    const esCorrecta = (seleccion === pregunta.correcta);
+    respuestasUsuario[id] = esCorrecta ? 1 : 0;
+
+    res.innerHTML = esCorrecta
+        ? "Correcto ✔️"
+        : "Incorrecto ❌<br>Correcta: " + pregunta.opciones[pregunta.correcta];
+
+    res.style.color = esCorrecta ? "green" : "red";
+
+    actualizarStats();
+}
+
+// =====================================================
+// ESTADÍSTICAS
+// =====================================================
+
+function actualizarStats() {
+    const contestadas = Object.keys(respuestasUsuario).length;
+
+    let aciertos = 0;
+    for (let k in respuestasUsuario) aciertos += respuestasUsuario[k];
+
+    const fallos = contestadas - aciertos;
+
+    if (contestadas === 0) {
+        document.getElementById("aciertos").textContent = "0%";
+        document.getElementById("fallos").textContent = "0%";
+        return;
+    }
+
+    document.getElementById("aciertos").textContent =
+        ((aciertos / contestadas) * 100).toFixed(1) + "%";
+
+    document.getElementById("fallos").textContent =
+        ((fallos / contestadas) * 100).toFixed(1) + "%";
+}
+
+window.onload = generarTest;
